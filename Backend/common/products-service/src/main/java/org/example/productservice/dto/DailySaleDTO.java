@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DailySalesDTO {
+public class DailySaleDTO {
     Integer salesId;
     Integer productId;
     Integer totalQuantitySold;

@@ -8,9 +8,8 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class BrandsDTO {
-    Integer brandId;
-    String brandName;
-    String logo;
-    String brandDescription;
+public class CategoryDTO {
+    Integer categoryId;
+    String categoryName;
+    String categoryDescription;
 }

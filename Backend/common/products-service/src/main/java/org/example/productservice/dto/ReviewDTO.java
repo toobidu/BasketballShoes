@@ -8,7 +8,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level =  AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReviewsDTO {
+public class ReviewDTO {
     Integer reviewId;
     Integer userId;
     Integer productId;
