@@ -1,6 +1,7 @@
 package org.example.productservice.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,36 +14,28 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "reviews")
+@Table(name = "categories")
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
-public class Reviews {
-
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Integer reviewId;
+    Integer categoryId;
 
-    @Column(name = "user_id", nullable = false)
-    Integer userId;
+    @NotNull(message = "Tên danh mục không được để trống!")
+    @Column(name = "name", nullable = false, length = 50)
+    String categoryName;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false, referencedColumnName = "id")
-    Products product;
-
-    @Column(name = "rating", nullable = false)
-    Integer rating;
-
-    @Column(name = "comment", columnDefinition = "TEXT")
-    String comment;
+    @Column(name = "description", columnDefinition = "TEXT")
+    String categoryDescription;
 
     @CreationTimestamp
     @Column(name = "created_at")
-    LocalDateTime createdAt = LocalDateTime.now();
+    LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    LocalDateTime updatedAt = LocalDateTime.now();
+    LocalDateTime updatedAt;
 }

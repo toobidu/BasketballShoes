@@ -1,16 +1,14 @@
 package org.example.productservice.dto;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class BrandsDTO {
-
     Integer brandId;
     String brandName;
     String logo;

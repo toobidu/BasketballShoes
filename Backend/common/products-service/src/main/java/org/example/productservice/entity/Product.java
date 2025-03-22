@@ -1,58 +1,65 @@
 package org.example.productservice.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.example.productservice.enums.ProductType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
-
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "products")
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
-public class Products {
-
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     Integer productId;
 
+    @NotBlank(message = "Tên sản phẩm không được để trống!")
     @Column(name = "name", nullable = false, length = 100)
     String productName;
 
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false, referencedColumnName = "id")
-    Brands brand;
+    Brand brand;
 
-    @Column(name = "price", nullable = false, precision = 10, scale = 2)
-    BigDecimal price = BigDecimal.ZERO;
+    @Column(name = "price", nullable = false, precision = 10, scale = 2, columnDefinition = "DECIMAL(10,2) DEFAULT 0.00")
+    BigDecimal price;
 
+    @Min(0)
     @Column(name = "stock", nullable = false)
     Integer stock;
 
+    @Min(1900)
+    @Max(2050)
     @Column(name = "launch_year")
     Integer launchYear;
 
     @Column(name = "nba_player")
     String nbaPlayer;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, length = 7)
-    String type; //indoor/outdoor
+    ProductType type;
 
     @Column(name = "description", columnDefinition = "TEXT")
     String productsDescription;
 
+    @NotNull
     @Column(name = "is_available", nullable = false)
     Boolean isAvailable;
 
@@ -67,15 +74,21 @@ public class Products {
 
     @CreationTimestamp
     @Column(name = "created_at")
-    LocalDateTime createdAt = LocalDateTime.now();
+    LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    LocalDateTime updatedAt = LocalDateTime.now();
+    LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<ProductCategories> productCategories;
+    @ManyToMany
+    @JoinTable(
+            name = "product_categories",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    Set<Category> categories = new HashSet<>();
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-    private Set<Reviews> reviews;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
+    Set<Review> reviews = new HashSet<>();
 }
+

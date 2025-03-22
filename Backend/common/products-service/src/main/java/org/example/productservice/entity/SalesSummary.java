@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.example.productservice.enums.PeriodType;
 import org.example.productservice.enums.period_type;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,9 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
 public class SalesSummary {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -30,7 +29,7 @@ public class SalesSummary {
 
     @ManyToOne
     @JoinColumn(name = "product_id", nullable = false, referencedColumnName = "id")
-    Products product;
+    Product product;
 
     @Column(name = "total_quantity_sold", nullable = false)
     Integer totalQuantitySold = 0;
@@ -40,7 +39,7 @@ public class SalesSummary {
 
     @Enumerated(EnumType.STRING) // Lưu dưới dạng STRING thay vì ORDINAL
     @Column(name = "period_type", nullable = false, length = 10)
-    period_type periodType; // DAILY, WEEKLY, MONTHLY
+    PeriodType periodType; // DAILY, WEEKLY, MONTHLY
 
     @Column(name = "period_date", nullable = false)
     LocalDate periodDate;
@@ -52,5 +51,4 @@ public class SalesSummary {
     @UpdateTimestamp
     @Column(name = "updated_at", nullable = false)
     LocalDateTime updatedAt;
-
 }

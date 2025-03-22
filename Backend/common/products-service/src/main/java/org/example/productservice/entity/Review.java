@@ -11,34 +11,37 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-
 @Data
 @Entity
-@Table(name = "brands")
+@Table(name = "reviews")
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+public class Review {
 
-public class Brands {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Integer brandId;
+    Integer reviewId;
 
-    @Column(name = "name", nullable = false)
-    String brandName;
+    @Column(name = "user_id", nullable = false)
+    Integer userId;
 
-    @Column(name = "logo_url", nullable = false)
-    String logo;
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false, referencedColumnName = "id")
+    Product product;
 
-    @Column(name = "description", columnDefinition = "TEXT")
-    String brandDescription;
+    @Column(name = "rating", nullable = false)
+    Integer rating;
+
+    @Column(name = "comment", columnDefinition = "TEXT")
+    String comment;
 
     @CreationTimestamp
     @Column(name = "created_at")
-    LocalDateTime createdAt = LocalDateTime.now();
+    LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    LocalDateTime updatedAt = LocalDateTime.now();
+    LocalDateTime updatedAt;
 }

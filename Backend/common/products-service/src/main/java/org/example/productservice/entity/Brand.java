@@ -1,6 +1,7 @@
 package org.example.productservice.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,32 +12,35 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
+
 @Data
 @Entity
-@Table(name = "categories")
+@Table(name = "brands")
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-
-public class Categories {
-
+public class Brand {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    Integer categoryId;
+    Integer brandId;
 
-    @Column(name = "name", nullable = false, length = 50)
-    String categoryName;
+    @NotBlank(message = "Tên thương hiệu không được để trống!")
+    @Column(name = "name", nullable = false)
+    String brandName;
+
+    @NotBlank(message = "Logo không được để trống!")
+    @Column(name = "logo_url", nullable = false)
+    String logo;
 
     @Column(name = "description", columnDefinition = "TEXT")
-    String categoryDescription;
+    String brandDescription;
 
     @CreationTimestamp
     @Column(name = "created_at")
-    LocalDateTime createdAt = LocalDateTime.now();
+    LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    LocalDateTime updatedAt = LocalDateTime.now();
-
+    LocalDateTime updatedAt;
 }
