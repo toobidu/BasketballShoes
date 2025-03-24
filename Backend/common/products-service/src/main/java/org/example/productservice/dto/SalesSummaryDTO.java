@@ -5,6 +5,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -17,5 +18,7 @@ public class SalesSummaryDTO {
     Integer totalQuantitySold;
     BigDecimal totalRevenue;
     String periodType;
-    LocalDate startDate;
+    LocalDate periodDate;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }

@@ -3,6 +3,8 @@ package org.example.productservice.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @FieldDefaults(level =  AccessLevel.PRIVATE)
@@ -14,4 +16,6 @@ public class ReviewDTO {
     Integer productId;
     Integer rating;
     String comment;
+    LocalDateTime createdAt;
+    LocalDateTime updatedAt;
 }
