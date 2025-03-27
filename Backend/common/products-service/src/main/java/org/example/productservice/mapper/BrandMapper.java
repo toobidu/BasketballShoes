@@ -3,7 +3,6 @@ package org.example.productservice.mapper;
 import org.example.productservice.dto.BrandDTO;
 import org.example.productservice.entity.Brand;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;

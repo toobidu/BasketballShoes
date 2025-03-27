@@ -23,22 +23,20 @@ import java.time.LocalDateTime;
 public class SalesSummary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    Integer salesSummaryId;
-
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false, referencedColumnName = "id")
-    Product product;
-
+    private Integer salesSummaryId;
+    
+    @Column(nullable = false)
+    private Integer productId;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PeriodType periodType;
+    
     @Column(name = "total_quantity_sold", nullable = false)
     Integer totalQuantitySold = 0;
 
     @Column(name = "total_revenue", nullable = false, precision = 15, scale = 2)
     BigDecimal totalRevenue = BigDecimal.ZERO;
-
-    @Enumerated(EnumType.STRING) // Lưu dưới dạng STRING thay vì ORDINAL
-    @Column(name = "period_type", nullable = false, length = 10)
-    PeriodType periodType; // DAILY, WEEKLY, MONTHLY
 
     @Column(name = "period_date", nullable = false)
     LocalDate periodDate;
