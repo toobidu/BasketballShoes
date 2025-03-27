@@ -30,7 +30,8 @@ public class SalesSummaryServiceImpl implements SalesSummaryService {
 
     @Override
     public Page<SalesSummaryDTO> findByProductId(Integer productId, Pageable pageable) {
-        Page<SalesSummary> salesSummaryPage = salesSummaryRepository.findByProduct_ProductId(productId, pageable);
+        // Update to use findByProductId instead of findByProduct_ProductId
+        Page<SalesSummary> salesSummaryPage = salesSummaryRepository.findByProductId(productId, pageable);
         return salesSummaryMapper.pageEntityToPageDto(salesSummaryPage);
     }
 
@@ -41,15 +42,10 @@ public class SalesSummaryServiceImpl implements SalesSummaryService {
     }
 
     @Override
-    public List<SalesSummaryDTO> findAllByProductIdAndPeriodType(Integer productId, String periodType) {
-        List<SalesSummary> salesSummaries = salesSummaryRepository.findByProduct_ProductIdAndPeriodType(productId, periodType);
+    public List<SalesSummaryDTO> findByProductIdAndPeriodType(Integer productId, String periodType) {
+        // Update to use findByProductIdAndPeriodType
+        List<SalesSummary> salesSummaries = salesSummaryRepository.findByProductIdAndPeriodType(productId, periodType);
         return salesSummaryMapper.entitiesToDtos(salesSummaries);
-    }
-
-    @Override
-    public Optional<SalesSummaryDTO> findSingleByProductIdAndPeriodType(Integer productId, String periodType) {
-        SalesSummary salesSummary = salesSummaryRepository.findByProductIdAndPeriodType(productId, periodType);
-        return Optional.ofNullable(salesSummary).map(salesSummaryMapper::entityToDto);
     }
 
     @Override

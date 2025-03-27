@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.example.productservice.enums.PeriodType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -23,15 +22,15 @@ import java.time.LocalDateTime;
 public class SalesSummary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer salesSummaryId;
-    
-    @Column(nullable = false)
-    private Integer productId;
-    
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PeriodType periodType;
-    
+    @Column(name = "id", nullable = false)
+    Integer salesSummaryId;
+
+    @Column(name = "product_id", nullable = false)
+    Integer productId;
+
+    @Column(name = "period_type", nullable = false)
+    String periodType;
+
     @Column(name = "total_quantity_sold", nullable = false)
     Integer totalQuantitySold = 0;
 

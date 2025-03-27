@@ -3,6 +3,7 @@ package org.example.productservice.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.productservice.dto.BrandDTO;
+import org.example.productservice.exception.BadRequestException;
 import org.example.productservice.exception.ResourceNotFoundException;
 import org.example.productservice.service.BrandService;
 import org.springframework.data.domain.Page;
@@ -64,11 +65,11 @@ public class BrandController {
     @PostMapping
     public ResponseEntity<?> createBrand(@Valid @RequestBody BrandDTO brandDTO) {
         if (brandDTO.getBrandId() != null) {
-            return ResponseEntity.badRequest().body("A new brand cannot have an ID");
+            throw new BadRequestException("A new brand cannot have an ID");
         }
 
         if (brandService.existsByBrandName(brandDTO.getBrandName())) {
-            return ResponseEntity.badRequest().body("Brand name already exists");
+            throw new BadRequestException("Brand name already exists");
         }
 
         BrandDTO createdBrand = brandService.save(brandDTO);
@@ -77,13 +78,15 @@ public class BrandController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateBrand(@PathVariable Integer id, @Valid @RequestBody BrandDTO brandDTO) {
-        try {
-            BrandDTO updatedBrand = brandService.update(id, brandDTO);
-            return ResponseEntity.ok(updatedBrand);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
+        // Thay try-catch bằng việc để Global Exception Handler xử lý
+        if (brandDTO.getBrandId() != null && !brandDTO.getBrandId().equals(id)) {
+            throw new BadRequestException("Brand ID in path and body must match");
         }
+
+        BrandDTO updatedBrand = brandService.update(id, brandDTO);
+        return ResponseEntity.ok(updatedBrand);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBrand(@PathVariable Integer id) {

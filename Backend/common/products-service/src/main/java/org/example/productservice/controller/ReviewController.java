@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.example.productservice.exception.BadRequestException;
 
 @RestController
 @RequestMapping("/api/reviews")
@@ -91,7 +92,7 @@ public class ReviewController {
     @PostMapping
     public ResponseEntity<?> createReview(@Valid @RequestBody ReviewDTO reviewDTO) {
         if (reviewDTO.getReviewId() != null) {
-            return ResponseEntity.badRequest().body("A new review cannot have an ID");
+            throw new BadRequestException("A new review cannot have an ID");
         }
 
         ReviewDTO createdReview = reviewService.save(reviewDTO);
@@ -100,12 +101,12 @@ public class ReviewController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateReview(@PathVariable Integer id, @Valid @RequestBody ReviewDTO reviewDTO) {
-        try {
-            ReviewDTO updatedReview = reviewService.update(id, reviewDTO);
-            return ResponseEntity.ok(updatedReview);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
+        if (reviewDTO.getReviewId() != null && !reviewDTO.getReviewId().equals(id)) {
+            throw new BadRequestException("Review ID in path and body must match");
         }
+
+        ReviewDTO updatedReview = reviewService.update(id, reviewDTO);
+        return ResponseEntity.ok(updatedReview);
     }
 
     @DeleteMapping("/{id}")

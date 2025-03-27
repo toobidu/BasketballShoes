@@ -3,7 +3,6 @@ package org.example.productservice.mapper;
 import org.example.productservice.dto.SalesSummaryDTO;
 import org.example.productservice.entity.SalesSummary;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,12 +14,10 @@ import java.util.stream.Collectors;
 public interface SalesSummaryMapper {
     SalesSummaryMapper INSTANCE = Mappers.getMapper(SalesSummaryMapper.class);
 
-    // Map from Entity to DTO
-    @Mapping(source = "product.productId", target = "productId")
+    // Direct mapping since productId is now a direct field
     SalesSummaryDTO entityToDto(SalesSummary salesSummary);
 
-    // Map from DTO to Entity
-    @Mapping(target = "product.productId", source = "productId")
+    // Direct mapping since productId is now a direct field
     SalesSummary dtoToEntity(SalesSummaryDTO salesSummaryDTO);
 
     default List<SalesSummaryDTO> entitiesToDtos(List<SalesSummary> salesSummaries) {

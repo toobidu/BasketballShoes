@@ -16,8 +16,6 @@ public interface SalesSummaryService {
 
     List<SalesSummaryDTO> findByProductIdAndPeriodType(Integer productId, String periodType);
 
-    SalesSummaryDTO findByProductIdAndPeriodType(Integer productId, String periodType);
-
     SalesSummaryDTO save(SalesSummaryDTO salesSummaryDTO);
 
     SalesSummaryDTO update(Integer id, SalesSummaryDTO salesSummaryDTO);

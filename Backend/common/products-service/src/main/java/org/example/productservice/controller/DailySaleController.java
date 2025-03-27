@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.example.productservice.exception.BadRequestException;
 
 @RestController
 @RequestMapping("/api/daily-sales")
@@ -89,7 +90,7 @@ public class DailySaleController {
     @PostMapping
     public ResponseEntity<?> createDailySale(@Valid @RequestBody DailySaleDTO dailySaleDTO) {
         if (dailySaleDTO.getSaleId() != null) {
-            return ResponseEntity.badRequest().body("A new daily sale cannot have an ID");
+            throw new BadRequestException("A new daily sale cannot have an ID");
         }
 
         DailySaleDTO createdDailySale = dailySaleService.save(dailySaleDTO);
@@ -98,12 +99,12 @@ public class DailySaleController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateDailySale(@PathVariable Integer id, @Valid @RequestBody DailySaleDTO dailySaleDTO) {
-        try {
-            DailySaleDTO updatedDailySale = dailySaleService.update(id, dailySaleDTO);
-            return ResponseEntity.ok(updatedDailySale);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
+        if (dailySaleDTO.getSaleId() != null && !dailySaleDTO.getSaleId().equals(id)) {
+            throw new BadRequestException("Daily Sale ID in path and body must match");
         }
+
+        DailySaleDTO updatedDailySale = dailySaleService.update(id, dailySaleDTO);
+        return ResponseEntity.ok(updatedDailySale);
     }
 
     @DeleteMapping("/{id}")

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.example.productservice.exception.BadRequestException;
 
 @RestController
 @RequestMapping("/api/sales-summary")
@@ -73,7 +74,7 @@ public class SalesSummaryController {
     @PostMapping
     public ResponseEntity<?> createSalesSummary(@Valid @RequestBody SalesSummaryDTO salesSummaryDTO) {
         if (salesSummaryDTO.getSalesSummaryId() != null) {
-            return ResponseEntity.badRequest().body("A new sales summary cannot have an ID");
+            throw new BadRequestException("A new sales summary cannot have an ID");
         }
 
         SalesSummaryDTO createdSalesSummary = salesSummaryService.save(salesSummaryDTO);
@@ -82,12 +83,12 @@ public class SalesSummaryController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateSalesSummary(@PathVariable Integer id, @Valid @RequestBody SalesSummaryDTO salesSummaryDTO) {
-        try {
-            SalesSummaryDTO updatedSalesSummary = salesSummaryService.update(id, salesSummaryDTO);
-            return ResponseEntity.ok(updatedSalesSummary);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
+        if (salesSummaryDTO.getSalesSummaryId() != null && !salesSummaryDTO.getSalesSummaryId().equals(id)) {
+            throw new BadRequestException("Sales Summary ID in path and body must match");
         }
+
+        SalesSummaryDTO updatedSalesSummary = salesSummaryService.update(id, salesSummaryDTO);
+        return ResponseEntity.ok(updatedSalesSummary);
     }
 
     @DeleteMapping("/{id}")

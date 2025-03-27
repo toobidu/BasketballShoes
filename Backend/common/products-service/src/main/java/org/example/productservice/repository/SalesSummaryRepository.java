@@ -11,9 +11,7 @@ import java.util.List;
 
 @Repository
 public interface SalesSummaryRepository extends JpaRepository<SalesSummary, Integer> {
-    Page<SalesSummary> findByProduct_ProductId(Integer productId, Pageable pageable);
-    
-    List<SalesSummary> findByProduct_ProductIdAndPeriodType(Integer productId, String periodType);
-    
-    List<SalesSummary> findByProductIdAndPeriodType(Integer productId, PeriodType periodType);
+    Page<SalesSummary> findByProductId(Integer productId, Pageable pageable);
+
+    List<SalesSummary> findByProductIdAndPeriodType(Integer productId, String periodType);
 }

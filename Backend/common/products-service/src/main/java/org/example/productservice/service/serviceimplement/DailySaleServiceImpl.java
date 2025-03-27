@@ -70,7 +70,7 @@ public class DailySaleServiceImpl implements DailySaleService {
         if (!dailySaleRepository.existsById(id)) {
             throw new ResourceNotFoundException("Daily sale not found with id: " + id);
         }
-        dailySaleDTO.setDailySaleId(id);
+        dailySaleDTO.setSaleId(id);
         DailySale dailySale = dailySaleMapper.dtoToEntity(dailySaleDTO);
         dailySale = dailySaleRepository.save(dailySale);
         return dailySaleMapper.entityToDto(dailySale);

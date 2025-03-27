@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.example.productservice.exception.BadRequestException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -64,11 +65,11 @@ public class CategoryController {
     @PostMapping
     public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
         if (categoryDTO.getCategoryId() != null) {
-            return ResponseEntity.badRequest().body("A new category cannot have an ID");
+            throw new BadRequestException("A new category cannot have an ID");
         }
 
         if (categoryService.existsByCategoryName(categoryDTO.getCategoryName())) {
-            return ResponseEntity.badRequest().body("Category name already exists");
+            throw new BadRequestException("Category name already exists");
         }
 
         CategoryDTO createdCategory = categoryService.save(categoryDTO);
@@ -77,12 +78,12 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryDTO categoryDTO) {
-        try {
-            CategoryDTO updatedCategory = categoryService.update(id, categoryDTO);
-            return ResponseEntity.ok(updatedCategory);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
+        if (categoryDTO.getCategoryId() != null && !categoryDTO.getCategoryId().equals(id)) {
+            throw new BadRequestException("Category ID in path and body must match");
         }
+
+        CategoryDTO updatedCategory = categoryService.update(id, categoryDTO);
+        return ResponseEntity.ok(updatedCategory);
     }
 
     @DeleteMapping("/{id}")

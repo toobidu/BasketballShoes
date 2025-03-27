@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.example.productservice.exception.BadRequestException;
 
 @RestController
 @RequestMapping("/api/products")
@@ -76,11 +77,11 @@ public class ProductController {
     @PostMapping
     public ResponseEntity<?> createProduct(@Valid @RequestBody ProductDTO productDTO) {
         if (productDTO.getProductId() != null) {
-            return ResponseEntity.badRequest().body("A new product cannot have an ID");
+            throw new BadRequestException("A new product cannot have an ID");
         }
 
         if (productService.existsByProductName(productDTO.getProductName())) {
-            return ResponseEntity.badRequest().body("Product name already exists");
+            throw new BadRequestException("Product name already exists");
         }
 
         ProductDTO createdProduct = productService.save(productDTO);
@@ -89,12 +90,12 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable Integer id, @Valid @RequestBody ProductDTO productDTO) {
-        try {
-            ProductDTO updatedProduct = productService.update(id, productDTO);
-            return ResponseEntity.ok(updatedProduct);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
+        if (productDTO.getProductId() != null && !productDTO.getProductId().equals(id)) {
+            throw new BadRequestException("Product ID in path and body must match");
         }
+
+        ProductDTO updatedProduct = productService.update(id, productDTO);
+        return ResponseEntity.ok(updatedProduct);
     }
 
     @DeleteMapping("/{id}")

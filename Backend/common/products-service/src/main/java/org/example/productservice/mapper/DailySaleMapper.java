@@ -3,6 +3,7 @@ package org.example.productservice.mapper;
 import org.example.productservice.dto.DailySaleDTO;
 import org.example.productservice.entity.DailySale;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -15,9 +16,11 @@ public interface DailySaleMapper {
     DailySaleMapper INSTANCE = Mappers.getMapper(DailySaleMapper.class);
 
     // Map from Entity to DTO
+    @Mapping(source = "saleDate", target = "salesDate")
     DailySaleDTO entityToDto(DailySale dailySale);
 
     // Map from DTO to Entity
+    @Mapping(source = "salesDate", target = "saleDate")
     DailySale dtoToEntity(DailySaleDTO dailySaleDTO);
 
     default List<DailySaleDTO> entitiesToDtos(List<DailySale> dailySales) {

@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.example.productservice.enums.ProductType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -52,9 +51,8 @@ public class Product {
     @Column(name = "nba_player")
     String nbaPlayer;
 
-    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false, length = 7)
-    ProductType type;
+    String type;
 
     @Column(name = "description", columnDefinition = "TEXT")
     String productsDescription;
